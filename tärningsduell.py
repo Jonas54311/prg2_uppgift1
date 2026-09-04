@@ -5,17 +5,22 @@ class Spelare:
     def __init__(self, namn=""):
         self.namn = namn
         self.poäng = 0
-        self.slag = 0
     
     def kasta(self):
-        self.slag = randint(1, 6)
+        return randint(1, 6)
     
     def vinn_runda(self):
         self.poäng += 1
-        print(f"{self.namn} vann rundan\n")
+        print(f"\n{self.namn} vann rundan\n")
+
+def prnt_score():
+    for s in range(2):
+        print(f"{str(spelare[s].namn) + ":":<{max(len(spelare[0].namn), len(spelare[1].namn)) + 2}}{spelare[s].poäng} poäng")
+    input("")
 
 while True:
     spelare = []
+    resultat = [0, 0]
 
     for s in range(2):
         spelare.append(Spelare(input("Spelare1 namn: ")))
@@ -23,22 +28,19 @@ while True:
     while spelare[0].poäng < 5 and spelare[1].poäng < 5:
         system("cls")
         for s in range(2):
-            spelare[s].kasta() 
-            print(f"{spelare[s].namn} kastade: {spelare[s].tärning}\n")
+            resultat[s] = spelare[s].kasta() 
+            print(f"{str(spelare[s].namn) + " kastade:":<{max(len(spelare[0].namn), len(spelare[1].namn)) + 10}}{resultat[s]}")
 
-        if spelare[0].tärning == spelare[1].tärning:
-            print("Oavgjort")
+        if resultat[0] == resultat[1]:
+            print("\nOavgjort\n")
         else:
-            spelare[max([spelare[0].slag, 0], [spelare[1].slag, 1])[1]].vinn_runda()
-        for s in range(2):
-            print(f"{spelare[s].namn}: {spelare[s].poäng} poäng\n")
-        input("")
+            spelare[max([resultat[0], 0], [resultat[1], 1])[1]].vinn_runda()
+
+        prnt_score()
 
     system("cls")
-    print(f"{spelare[next(max(next(iter([spelare[0].poäng, spelare[0].position])), next(iter([spelare[1].poäng, spelare[1].position]))))].namn} vann!")
-    for s in range(2):
-        print(f"\n{spelare[s].namn}: {spelare[s].poäng} poäng")
-    input("")
+    print(f"{spelare[max([spelare[0].poäng, 0], [spelare[1].poäng, 1])[1]].namn} vann!\n")
+    prnt_score()
     system("cls")
 
     choosing = True
