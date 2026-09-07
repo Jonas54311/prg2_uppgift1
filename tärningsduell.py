@@ -18,7 +18,8 @@ def prnt_score():
         print(f"{str(spelare[s].namn) + ":":<{max(len(spelare[0].namn), len(spelare[1].namn)) + 2}}{spelare[s].poäng} poäng")
     input("")
 
-while True:
+spelar = True
+while spelar:
     spelare = []
     resultat = [0, 0]
 
@@ -43,15 +44,12 @@ while True:
     prnt_score()
     system("cls")
 
-    choosing = True
-    while choosing:
+    while True:
         fortsätt = input("Vill ni köra igen? (Y/N) ")
         if fortsätt.lower() == "n":
-            choosing = False
-        elif fortsätt.lower() == "y":
-            break
-        else:
+            spelar = False
+        elif fortsätt.lower() != "y":
             print("inte Y eller N")
-    else:
+            continue
+        system("cls")
         break
-    system("cls")
