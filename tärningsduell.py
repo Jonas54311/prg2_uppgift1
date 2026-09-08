@@ -1,47 +1,75 @@
 from random import randint
 from os import system
 
+class Tarningsspel:
+    def __init__(self, spelare=None):
+         self.spelare = spelare
+         self.resultat = [0, 0, 0]
+         self.runda = 0
+
+    def spela_runda(self):
+        system("cls")
+        self.runda += 1
+        print(f"Runda {self.runda}")
+        for P in range(3):
+            self.resultat[P] = self.spelare[P].kasta()
+            print(f"{str(self.spelare[P].namn) + " kastade:":<{max(len(self.spelare[0].namn), len(self.spelare[1].namn)) + 10}}{self.resultat[P]}", end=" ")
+            if self.resultat[P] == 6:
+                self.spelare[P].poäng += 1
+                print("och får ett extrapoäng")
+            else:
+                print("")
+
+        if self.resultat[0] == self.resultat[1] and self.resultat[2] <= self.resultat[0] or self.resultat[2] == self.resultat[1] and self.resultat[0] <= self.resultat[2] or self.resultat[0] == self.resultat[2] and self.resultat[1] <= self.resultat[0]:
+            print("\nOavgjort\n")
+        else:
+            self.spelare[max([self.resultat[0], 0], [self.resultat[1], 1], [self.resultat[2], 2])[1]].vinn_runda()
+
+        prnt_score()
+        input("")
+
 class Spelare:
     def __init__(self, namn=""):
         self.namn = namn
         self.poäng = 0
+        self.rundor_vunnit = 0
     
     def kasta(self):
         return randint(1, 6)
     
     def vinn_runda(self):
         self.poäng += 1
+        self.rundor_vunnit += 1
         print(f"\n{self.namn} vann rundan\n")
 
 def prnt_score():
-    for s in range(2):
-        print(f"{str(spelare[s].namn) + ":":<{max(len(spelare[0].namn), len(spelare[1].namn)) + 2}}{spelare[s].poäng} poäng")
-    input("")
+    for P in range(3):
+        print(f"{str(tarningsspel.spelare[P].namn) + ":":<{max(len(tarningsspel.spelare[0].namn), len(tarningsspel.spelare[1].namn)) + 2}}{tarningsspel.spelare[P].poäng} poäng")
 
 spelar = True
 while spelar:
-    spelare = []
-    resultat = [0, 0]
+    system("cls")
+    tarningsspel = Tarningsspel([Spelare(input("Spelare1 namn: ")), Spelare(input("Spelare2 namn: ")), Spelare(input("Spelare3 namn: "))])
+    while True:
+        try:
+            vinst_poäng = int(input("Poäng för att vinna: "))
+            break
+        except ValueError:
+            print("Måste vara ett heltal")
 
-    for s in range(2):
-        spelare.append(Spelare(input("Spelare1 namn: ")))
-
-    while spelare[0].poäng < 5 and spelare[1].poäng < 5:
-        system("cls")
-        for s in range(2):
-            resultat[s] = spelare[s].kasta() 
-            print(f"{str(spelare[s].namn) + " kastade:":<{max(len(spelare[0].namn), len(spelare[1].namn)) + 10}}{resultat[s]}")
-
-        if resultat[0] == resultat[1]:
-            print("\nOavgjort\n")
-        else:
-            spelare[max([resultat[0], 0], [resultat[1], 1])[1]].vinn_runda()
-
-        prnt_score()
+    while tarningsspel.spelare[0].poäng < vinst_poäng and tarningsspel.spelare[1].poäng < vinst_poäng and tarningsspel.spelare[2].poäng < vinst_poäng:
+        tarningsspel.spela_runda()
 
     system("cls")
-    print(f"{spelare[max([spelare[0].poäng, 0], [spelare[1].poäng, 1])[1]].namn} vann!\n")
+    if tarningsspel.spelare[0].poäng == tarningsspel.spelare[1].poäng:
+        print("Oavgjort")
+    else:
+        print(f"{tarningsspel.spelare[max([tarningsspel.spelare[0].poäng, 0], [tarningsspel.spelare[1].poäng, 1])[1]].namn} vann!\n")
     prnt_score()
+    print("")
+    for P in range(2):
+        print(f"{tarningsspel.spelare[P].namn} vann {tarningsspel.spelare[P].rundor_vunnit} rundor")
+    input("")
     system("cls")
 
     while True:
@@ -51,5 +79,4 @@ while spelar:
         elif fortsätt.lower() != "y":
             print("inte Y eller N")
             continue
-        system("cls")
         break
