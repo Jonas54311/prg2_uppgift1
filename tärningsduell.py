@@ -13,7 +13,7 @@ class Tarningsspel:
         print(f"Runda {self.runda}")
         for P in range(3):
             self.resultat[P] = self.spelare[P].kasta()
-            print(f"{str(self.spelare[P].namn) + " kastade:":<{max(len(self.spelare[0].namn), len(self.spelare[1].namn)) + 10}}{self.resultat[P]}", end=" ")
+            print(f"{str(self.spelare[P].namn) + " slog:":<{max(len(self.spelare[0].namn), len(self.spelare[1].namn)) + 8}}{self.resultat[P]}", end=" ")
             if self.resultat[P] == 6:
                 self.spelare[P].poäng += 1
                 print("och får ett extrapoäng")
@@ -61,13 +61,13 @@ while spelar:
         tarningsspel.spela_runda()
 
     system("cls")
-    if tarningsspel.spelare[0].poäng == tarningsspel.spelare[1].poäng:
+    if tarningsspel.spelare[0].poäng == tarningsspel.spelare[1].poäng and tarningsspel.spelare[2].poäng <= tarningsspel.spelare[0] or tarningsspel.spelare[2].poäng == tarningsspel.spelare[1].poäng and tarningsspel.spelare[0].poäng <= tarningsspel.spelare[2] or tarningsspel.spelare[0].poäng == tarningsspel.spelare[2].poäng and tarningsspel.spelare[1].poäng <= tarningsspel.spelare[0]:
         print("Oavgjort")
     else:
-        print(f"{tarningsspel.spelare[max([tarningsspel.spelare[0].poäng, 0], [tarningsspel.spelare[1].poäng, 1])[1]].namn} vann!\n")
+        print(f"{tarningsspel.spelare[max([tarningsspel.spelare[0].poäng, 0], [tarningsspel.spelare[1].poäng, 1], [tarningsspel.spelare[2].poäng, 2])[1]].namn} vann!\n")
     prnt_score()
     print("")
-    for P in range(2):
+    for P in range(3):
         print(f"{tarningsspel.spelare[P].namn} vann {tarningsspel.spelare[P].rundor_vunnit} rundor")
     input("")
     system("cls")
