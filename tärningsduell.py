@@ -2,7 +2,7 @@ from random import randint
 from os import system
 
 class Tarningsspel:
-    def __init__(self, spelare=None):
+    def __init__(self, spelare):
          self.spelare = spelare
          self.resultat = [0, 0, 0]
          self.runda = 0
@@ -13,8 +13,11 @@ class Tarningsspel:
         print(f"Runda {self.runda}")
         for P in range(3):
             self.resultat[P] = self.spelare[P].kasta()
-            print(f"{str(self.spelare[P].namn) + " slog:":<{max(len(self.spelare[0].namn), len(self.spelare[1].namn)) + 8}}{self.resultat[P]}", end=" ")
-            if self.resultat[P] == 6:
+            print(f"{str(self.spelare[P].namn) + " slog:":<{max(len(self.spelare[0].namn), len(self.spelare[1].namn)) + 8}}{self.spelare[P].tärningar[0].slag} {self.spelare[P].tärningar[1].slag}", end=" ")
+            if self.spelare[P].tärningar[0].slag == 6 and self.spelare[P].tärningar[1].slag == 6:
+                self.spelare[P].poäng += 2
+                print("och får två extrapoäng")
+            elif self.spelare[P].tärningar[0].slag == 6 or self.spelare[P].tärningar[1].slag == 6:
                 self.spelare[P].poäng += 1
                 print("och får ett extrapoäng")
             else:
@@ -33,14 +36,24 @@ class Spelare:
         self.namn = namn
         self.poäng = 0
         self.rundor_vunnit = 0
+        self.tärningar = [Tarning(), Tarning()]
     
     def kasta(self):
-        return randint(1, 6)
+        for k in range(2):
+            self.tärningar[k].kasta()
+        return self.tärningar[0].slag + self.tärningar[1].slag
     
     def vinn_runda(self):
         self.poäng += 1
         self.rundor_vunnit += 1
         print(f"\n{self.namn} vann rundan\n")
+
+class Tarning:
+    def __init__(self):
+        self.slag = 0
+
+    def kasta(self):
+        self.slag = randint(1, 6)
 
 def prnt_score():
     for P in range(3):
