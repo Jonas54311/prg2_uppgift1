@@ -4,7 +4,7 @@ from os import system
 class Tarningsspel:
     def __init__(self, spelare):
          self.spelare = spelare
-         self.resultat = [0, 0, 0]
+         self.resultat = []
          self.runda = 0
 
     def spela_runda(self):
@@ -12,7 +12,7 @@ class Tarningsspel:
         self.runda += 1
         print(f"Runda {self.runda}")
         for P in range(3):
-            self.resultat[P] = self.spelare[P].kasta()
+            self.resultat.append(self.spelare[P].kasta())
             print(f"{str(self.spelare[P].namn) + " slog:":<{max(len(self.spelare[0].namn), len(self.spelare[1].namn)) + 8}}{self.spelare[P].tärningar[0].slag} {self.spelare[P].tärningar[1].slag}", end=" ")
             if self.spelare[P].tärningar[0].slag == 6 and self.spelare[P].tärningar[1].slag == 6:
                 self.spelare[P].poäng += 2
@@ -22,18 +22,19 @@ class Tarningsspel:
                 print("och får ett extrapoäng")
             else:
                 print("")
-
-        if self.resultat[0] == self.resultat[1] and self.resultat[2] <= self.resultat[0] or self.resultat[2] == self.resultat[1] and self.resultat[0] <= self.resultat[2] or self.resultat[0] == self.resultat[2] and self.resultat[1] <= self.resultat[0]:
+        self.resultat = sorted(self.resultat, reverse=True)
+        if self.resultat[0][0] == self.resultat[1][0]:
             print("\nOavgjort\n")
         else:
-            self.spelare[max([self.resultat[0], 0], [self.resultat[1], 1], [self.resultat[2], 2])[1]].vinn_runda()
+            self.spelare[max(self.resultat)[1]].vinn_runda()
 
         prnt_score()
         input("")
 
 class Spelare:
-    def __init__(self, namn=""):
+    def __init__(self, namn="", idnum=0):
         self.namn = namn
+        self.idnum = idnum
         self.poäng = 0
         self.rundor_vunnit = 0
         self.tärningar = [Tarning(), Tarning()]
@@ -41,7 +42,7 @@ class Spelare:
     def kasta(self):
         for k in range(2):
             self.tärningar[k].kasta()
-        return self.tärningar[0].slag + self.tärningar[1].slag
+        return [self.tärningar[0].slag + self.tärningar[1].slag, self.idnum]
     
     def vinn_runda(self):
         self.poäng += 1
@@ -62,7 +63,7 @@ def prnt_score():
 spelar = True
 while spelar:
     system("cls")
-    tarningsspel = Tarningsspel([Spelare(input("Spelare1 namn: ")), Spelare(input("Spelare2 namn: ")), Spelare(input("Spelare3 namn: "))])
+    tarningsspel = Tarningsspel([Spelare(input("Spelare1 namn: "), 0), Spelare(input("Spelare2 namn: "), 1), Spelare(input("Spelare3 namn: "), 2)])
     while True:
         try:
             vinst_poäng = int(input("Poäng för att vinna: "))
