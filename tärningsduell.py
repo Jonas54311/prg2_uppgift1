@@ -9,6 +9,7 @@ class Tarningsspel:
 
     def spela_runda(self):
         system("cls")
+        self.resultat = []
         self.runda += 1
         print(f"Runda {self.runda}")
         for P in range(3):
@@ -23,10 +24,11 @@ class Tarningsspel:
             else:
                 print("")
         self.resultat = sorted(self.resultat, reverse=True)
+        print(self.resultat)
         if self.resultat[0][0] == self.resultat[1][0]:
             print("\nOavgjort\n")
         else:
-            self.spelare[max(self.resultat)[1]].vinn_runda()
+            self.spelare[self.resultat[0][1]].vinn_runda()
 
         prnt_score()
         input("")
