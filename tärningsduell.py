@@ -58,7 +58,7 @@ class Tarning:
 
 def prnt_score():
     for P in range(3):
-        print(f"{str(tarningsspel.spelare[P].namn) + ":":<{max(len(tarningsspel.spelare[0].namn), len(tarningsspel.spelare[1].namn)) + 2}}{tarningsspel.spelare[P].poäng} poäng")
+        print(f"{str(tarningsspel.spelare[P].namn) + ":":<{max(len(tarningsspel.spelare[0].namn), len(tarningsspel.spelare[1].namn), len(tarningsspel.spelare[2].namn)) + 2}}{tarningsspel.spelare[P].poäng} poäng")
 
 spelar = True
 while spelar:
